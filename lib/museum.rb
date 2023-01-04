@@ -10,11 +10,15 @@ class Museum
     @exhibits = []
     @patrons = []
     @revenue = 0
-    @patrons_of_exhibits = Hash.new { |h, k| h[k] = [] }
+    @patrons_of_exhibits = {}
   end
 
   def add_exhibit(exhibit)
     @exhibits << exhibit
+
+    # After adding an exhibit to the Museum, also add the key to the 
+    # @patrons_of_exhibits instance variable to keep track of this exhibits visitors (see #admit method)
+    @patrons_of_exhibits[exhibit] = []
   end
 
   def recommend_exhibits(patron)
@@ -25,19 +29,6 @@ class Museum
 
   def admit(patron)
     @patrons << patron
-
-    # Loop through the exhibits Array
-    @exhibits.each do |exhibit|
-      # If the @patrons_of_exhibits (from initialize) with the key of <exhibit> is empty
-      if @patrons_of_exhibits[exhibit].empty?
-        # Keep it empty
-        @patrons_of_exhibits[exhibit] = []
-      end
-
-      # Else do nothing because it already has visitors and we don't want to clear it out
-    end
-
-    ##################
     
     # Loop through the recommended exhibits (note: they are in descending order by price)
     recommend_exhibits_by_cost(patron).each do |exhibit|
